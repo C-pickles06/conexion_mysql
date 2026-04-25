@@ -8,10 +8,10 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     /* TODO 29a: Define la variable de color principal de tu app */
-    :root { --color: ???; }  /* Sugerencia: #00758f o tu color favorito */
+    :root { --color: #00758f; }  /* Sugerencia: #00758f o tu color favorito */
     /* TODO 29b: Estilos básicos */
     body { background: #f0f2f5; }
-    .navbar { background: ??? !important; }
+    .navbar { background: var(--color) !important; }
   </style>
 </head>
 <body>
@@ -25,6 +25,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
     <!-- ??? -->
+     <h1>Mi Agenda</h1>
+     <ul>
+        <li>
+          <a href="/practica_app/index.php">Inicio</a>
+        </li>
+        <li>
+          <a href="/practica_app/contactos/index.php">Contactos</a>
+        </li>
+        <li>
+          <a href="/practica_app/contactos/crear.php">Agregar</a>
+        </li>
+        
+     </ul>
+     
   </div>
 </nav>
 

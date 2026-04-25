@@ -43,17 +43,21 @@ require_once __DIR__ . '/includes/header.php';
 <?php else: ?>
 
 <!-- TODO 4: Muestra el título "Mi Agenda de Contactos" con un ícono y subtítulo -->
-<!-- ??? -->
 <h1> Mi Agenda de Contactos</h1>
+<!-- ??? -->
+
 <!-- TODO 5: Muestra tarjetas con las estadísticas:
      - Total de contactos ($total)
      - Contactos con teléfono ($conTel)
      - Un botón "Ver todos los contactos" que apunte a contactos/index.php
 -->
-<!-- ??? -->
 <p>total de contactos <?= $total ?></p>
 <p>Contactos con telefono <?= $conTel ?></p>
-<button>ver contactos</button>
+<a href="contactos/index.php">
+    <button type="button">ver contactos</button>
+</a>
+<!-- ??? -->
+
 
 <?php endif; ?>
 
