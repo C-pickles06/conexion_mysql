@@ -25,14 +25,30 @@ $nivel         = 2;
 $archivoActual = 'practica_app/contactos/index.php';
 
 // TODO 7: ???
-$categoriaFiltro = '???';
+$categoriaFiltro = $_GET['cat'] ?? '';
 $error           = null;
 $contactos       = [];
 $categorias      = [];
 
 // TODO 8: ???
 
-require_once __DIR__ . '/../includes/header.php';
+try {
+  $pdo = DB::conectar();
+  $categorias = $pdo
+    ->query('SELECT DISTINCT categoria from contactos ORDER BY categoria')
+    ->fetchAll(PDO::FETCH_COLUMN);
+  
+  if ($categoriaFiltro) {
+    $stmtCount = $pdo -> prepare('SELECT COUNT(*) FROM contactos WHERE categoria = ?');
+    $stmtCount->execute([$categoriaFiltro]);
+  }else {
+    $stmtCount = $pdo->query('SELECT COUNT(*) FROM productos');
+  }
+  $total = $stmtCount->fetchColumn();
+  $paginas = (int)ceil($total / $porPagina);
+} catch (\Throwable $th) {
+  //throw $th;
+}
 ?>
 
 <!-- TODO 9: Muestra el título "Mis Contactos" y un botón "Agregar contacto"
