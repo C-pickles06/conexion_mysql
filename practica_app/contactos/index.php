@@ -39,47 +39,87 @@ try {
     ->fetchAll(PDO::FETCH_COLUMN);
   
   if ($categoriaFiltro) {
-    $stmtCount = $pdo -> prepare('SELECT COUNT(*) FROM contactos WHERE categoria = ?');
-    $stmtCount->execute([$categoriaFiltro]);
+    $stmt = $pdo -> prepare('SELECT * FROM contactos WHERE categoria = ? ORDER BY nombre');
+    $stmt ->execute([$categoriaFiltro]);
   }else {
-    $stmtCount = $pdo->query('SELECT COUNT(*) FROM productos');
+    $stmt = $pdo->query('SELECT * FROM conactos ORDER BY nombre');
   }
-  $total = $stmtCount->fetchColumn();
-  $paginas = (int)ceil($total / $porPagina);
-} catch (\Throwable $th) {
-  //throw $th;
+  $contactos = $stmt->fetchColumn();
+} catch (PDOException $e) {
+  $error = $e -> getMessage();
 }
+require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- TODO 9: Muestra el título "Mis Contactos" y un botón "Agregar contacto"
      que apunte a crear.php -->
 <!-- ??? -->
-
+<h2><?count($contactos)?></h2>
+<button><a href="/practica_app/contactos/crear.php"></a>Agregar contacto</button>
 <!-- TODO 10: Muestra botones de filtro por categoría:
      - Botón "Todos" → apunta a index.php (activo si $categoriaFiltro está vacío)
      - Un botón por cada $categoria en $categorias → apunta a ?cat=CATEGORIA
        (activo si $categoriaFiltro === $categoria)
      Tip: urlencode($cat) en el href, htmlspecialchars($cat) en el texto -->
 <!-- ??? -->
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+  <div>
+    <h1 class="fw-bold mb-1"><i class="fas fa-address-book me-2" style="color:var(--color)"></i>Mis Contactos</h1>
+    <p class="text-muted mb-0">Lista completa de contactos almacenados en la base de datos.</p>
+  </div>
+  <a href="crear.php" class="btn btn-db">
+    <i class="fas fa-plus me-1"></i> Agregar contacto
+  </a>
+</div>
+
+<div class="mb-4 d-flex flex-wrap gap-2">
+  <a href="index.php" class="btn btn-sm <?= $categoriaFiltro === '' ? 'btn-dark' : 'btn-outline-dark' ?>">Todos</a>
+  <?php foreach ($categorias as $categoria): ?>
+    <?php $activo = $categoriaFiltro === $categoria; ?>
+    <a href="?cat=<?= urlencode($categoria) ?>" class="btn btn-sm <?= $activo ? 'btn-dark' : 'btn-outline-dark' ?>">
+      <?= htmlspecialchars($categoria) ?>
+    </a>
+  <?php endforeach; ?>
+</div>
 
 <?php if ($error): ?>
   <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
 <?php elseif (empty($contactos)): ?>
-  <!-- TODO 11: Muestra un mensaje de alerta si no hay contactos -->
-  <!-- ??? -->
+  <div class="alert alert-warning mb-0">No hay contactos registrados.</div>
 <?php else: ?>
 
-<!-- TODO 12: Muestra una cuadrícula de tarjetas (row g-4, col-sm-6 col-lg-4).
-     Cada tarjeta debe mostrar:
-       - La categoría como badge de color
-       - El nombre del contacto (escapado con htmlspecialchars)
-       - El email con ícono fa-envelope
-       - El teléfono si existe, o "Sin teléfono" en gris si es null
-       - Un botón "Ver" → ver.php?id={id}
-       - Un botón ícono de editar → editar.php?id={id}
-       - Un botón ícono de eliminar → eliminar.php?id={id}
-     REGLA: usa htmlspecialchars() en TODOS los valores del usuario -->
-<!-- ??? -->
+<div class="row g-4">
+  <?php foreach ($contactos as $contacto): ?>
+    <div class="col-sm-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <span class="badge bg-primary mb-3"><?= htmlspecialchars($contacto['categoria']) ?></span>
+          <h5 class="card-title mb-2"><?= htmlspecialchars($contacto['nombre']) ?></h5>
+          <p class="mb-1"><i class="fas fa-envelope me-1"></i> <?= htmlspecialchars($contacto['email']) ?></p>
+          <p class="mb-3">
+            <i class="fas fa-phone me-1"></i>
+            <?php if (!empty($contacto['telefono'])): ?>
+              <?= htmlspecialchars($contacto['telefono']) ?>
+            <?php else: ?>
+              <span class="text-muted">Sin teléfono</span>
+            <?php endif; ?>
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="ver.php?id=<?= (int) $contacto['id'] ?>" class="btn btn-sm btn-db">
+              <i class="fas fa-eye me-1"></i> Ver
+            </a>
+            <a href="editar.php?id=<?= (int) $contacto['id'] ?>" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-pen"></i>
+            </a>
+            <a href="eliminar.php?id=<?= (int) $contacto['id'] ?>" class="btn btn-sm btn-outline-danger">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endforeach; ?>
+</div>
 
 <?php endif; ?>
 
