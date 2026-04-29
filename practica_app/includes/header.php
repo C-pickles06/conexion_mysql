@@ -7,38 +7,46 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* TODO 29a: Define la variable de color principal de tu app */
-    :root { --color: #00758f; }  /* Sugerencia: #00758f o tu color favorito */
-    /* TODO 29b: Estilos básicos */
+    :root { --color: #00758f; }
     body { background: #f0f2f5; }
-    .navbar { background: var(--color) !important; }
+    .navbar { background: #0d1117 !important; border-bottom: 2px solid var(--color); }
+    .card { border: none; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    .btn-db { background: var(--color); color: #fff; border: none; }
+    .btn-db:hover { background: #005f7a; color: #fff; }
+    .badge-layer { background: var(--color); font-size: .65rem; padding: 2px 7px; border-radius: 4px; }
   </style>
 </head>
 <body>
 
-<!-- TODO 29c: Crea la barra de navegación con Bootstrap.
-     Debe incluir:
-       - Nombre de la app ("Mi Agenda") con ícono fa-address-book
-       - Links: Inicio (index.php), Contactos (contactos/index.php), Agregar (contactos/crear.php)
-       - Un badge pequeño indicando "Demo MySQL" o el nombre de tu BD
--->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container">
-    <!-- ??? -->
-     <h1>Mi Agenda</h1>
-     <ul>
-        <li>
-          <a href="/practica_app/index.php">Inicio</a>
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="<?= str_repeat('../', $nivel ?? 1) ?>index.php">
+      <i class="fas fa-address-book" style="color:#56d157"></i>
+      Mi Agenda
+      <span class="badge-layer ms-1">Demo MySQL</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item">
+          <a class="nav-link" href="<?= str_repeat('../', $nivel ?? 1) ?>index.php">
+            <i class="fas fa-home me-1"></i>Inicio
+          </a>
         </li>
-        <li>
-          <a href="/practica_app/contactos/index.php">Contactos</a>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= str_repeat('../', $nivel ?? 1) ?>contactos/index.php">
+            <i class="fas fa-list me-1"></i>Contactos
+          </a>
         </li>
-        <li>
-          <a href="/practica_app/contactos/crear.php">Agregar</a>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= str_repeat('../', $nivel ?? 1) ?>contactos/crear.php">
+            <i class="fas fa-plus me-1"></i>Agregar
+          </a>
         </li>
-        
-     </ul>
-     
+      </ul>
+    </div>
   </div>
 </nav>
 

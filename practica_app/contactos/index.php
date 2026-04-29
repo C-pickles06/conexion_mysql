@@ -19,49 +19,38 @@
  *           e) Si hay PDOException, guarda en $error
  */
 
-// TODO 6: ???
+// TODO 6:
+require_once __DIR__ . '/../config/db.php';
 $titulo        = 'Mis Contactos';
 $nivel         = 2;
 $archivoActual = 'practica_app/contactos/index.php';
 
-// TODO 7: ???
+// TODO 7:
 $categoriaFiltro = $_GET['cat'] ?? '';
 $error           = null;
 $contactos       = [];
 $categorias      = [];
 
-// TODO 8: ???
-
+// TODO 8:
 try {
-  $pdo = DB::conectar();
-  $categorias = $pdo
-    ->query('SELECT DISTINCT categoria from contactos ORDER BY categoria')
-    ->fetchAll(PDO::FETCH_COLUMN);
-  
-  if ($categoriaFiltro) {
-    $stmt = $pdo -> prepare('SELECT * FROM contactos WHERE categoria = ? ORDER BY nombre');
-    $stmt ->execute([$categoriaFiltro]);
-  }else {
-    $stmt = $pdo->query('SELECT * FROM conactos ORDER BY nombre');
-  }
-  $contactos = $stmt->fetchColumn();
+    $pdo = DB::conectar();
+    $categorias = $pdo->query('SELECT DISTINCT categoria FROM contactos ORDER BY categoria')->fetchAll(PDO::FETCH_COLUMN);
+
+    if ($categoriaFiltro !== '') {
+        $stmt = $pdo->prepare('SELECT * FROM contactos WHERE categoria = ? ORDER BY nombre');
+        $stmt->execute([$categoriaFiltro]);
+    } else {
+        $stmt = $pdo->query('SELECT * FROM contactos ORDER BY nombre');
+    }
+
+    $contactos = $stmt->fetchAll();
 } catch (PDOException $e) {
-  $error = $e -> getMessage();
+    $error = $e->getMessage();
 }
+
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<!-- TODO 9: Muestra el título "Mis Contactos" y un botón "Agregar contacto"
-     que apunte a crear.php -->
-<!-- ??? -->
-<h2><?count($contactos)?></h2>
-<button><a href="/practica_app/contactos/crear.php"></a>Agregar contacto</button>
-<!-- TODO 10: Muestra botones de filtro por categoría:
-     - Botón "Todos" → apunta a index.php (activo si $categoriaFiltro está vacío)
-     - Un botón por cada $categoria en $categorias → apunta a ?cat=CATEGORIA
-       (activo si $categoriaFiltro === $categoria)
-     Tip: urlencode($cat) en el href, htmlspecialchars($cat) en el texto -->
-<!-- ??? -->
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
   <div>
     <h1 class="fw-bold mb-1"><i class="fas fa-address-book me-2" style="color:var(--color)"></i>Mis Contactos</h1>

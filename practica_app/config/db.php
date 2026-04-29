@@ -35,20 +35,23 @@ class DB
      */
     public static function conectar(): PDO
     {
-        if (self::$conexion === null){
+        if (self::$conexion === null) {
             $dsn = sprintf(
                 'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
                 self::HOST,
                 self::PUERTO,
                 self::NOMBRE
             );
+
             $opciones = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE =>PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES =>false,
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
             ];
+
             self::$conexion = new PDO($dsn, self::USUARIO, self::CLAVE, $opciones);
         }
+
         return self::$conexion;
     }
 
