@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // TODO 17: Validar
     if ($valores['nombre'] === '') {
         $errores[] = 'El nombre es obligatorio.';
-    } elseif (mb_strlen($valores['nombre']) > 100) {
+    } elseif (strlen($valores['nombre']) > 100) {
         $errores[] = 'El nombre no puede superar 100 caracteres.';
     }
 
